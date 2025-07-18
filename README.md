@@ -2,18 +2,6 @@
 
 **Mobile Document Manager** es una aplicación móvil construida con **React Native**, orientada a gestionar documentos locales en dispositivos móviles. Permite al usuario seleccionar, describir, visualizar, filtrar, editar y eliminar documentos PDF o imágenes, categorizándolos y manteniéndolos almacenados localmente mediante AsyncStorage.
 
-## Capturas de pantalla
-
-![Captura1](./src/assets/images/capturas/image1.png)
-![Captura2](./src/assets/images/capturas/image2.png)
-![Captura3](./src/assets/images/capturas/image3.png)
-![Captura4](./src/assets/images/capturas/image4.png)
-
-## Diseño UI/UX
-
-![Mockups](./src/assets/images/design/Mockups.png)
-![DesignSystem](./src/assets/images/design/DesignSystem.png)
-
 ---
 
 ## Pasos para instalación local
@@ -115,3 +103,17 @@ Los documentos se almacenan en AsyncStorage bajo la key @documents:
   type: string;           // Tipo MIME (e.g., image/jpeg, application/pdf)
   date: string;           // Fecha de carga
 }
+
+---
+
+## Capturas de pantalla
+
+![Captura1](./src/assets/images/capturas/image1.png)
+![Captura2](./src/assets/images/capturas/image2.png)
+![Captura3](./src/assets/images/capturas/image3.png)
+![Captura4](./src/assets/images/capturas/image4.png)
+
+## Diseño UI/UX
+
+![Mockups](./src/assets/images/design/Mockups.png)
+![DesignSystem](./src/assets/images/design/DesignSystem.png)
