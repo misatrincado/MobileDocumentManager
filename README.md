@@ -103,6 +103,7 @@ Los documentos se almacenan en AsyncStorage bajo la key @documents:
   type: string;           // Tipo MIME (e.g., image/jpeg, application/pdf)
   date: string;           // Fecha de carga
 }
+```
 
 ---
 
