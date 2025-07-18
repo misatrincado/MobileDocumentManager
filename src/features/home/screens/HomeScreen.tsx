@@ -1,12 +1,22 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
+import { HomeHeader } from '../../../components/organisms/HomeHeader';
+import DocumentListScreen from '../../documents/screens/DocumentListScreen';
+import FloatingButton from '../../../components/atoms/FloatingButton';
 
-const HomeScreen = ({ navigation } : any) => {
+const HomeScreen = ({ navigation }: any) => {
+
+  const onAddDocument = () => {
+    navigation.navigate('AddDocument');
+  };
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Gestor Documental</Text>
-      <Button title="Agregar Documento" onPress={() => navigation.navigate('AddDocument')} />
-      <Button title="Ver Documentos" onPress={() => navigation.navigate('DocumentList')} />
+    <View style={{flex:1}}>
+      <View style={{}}>
+        <HomeHeader />
+        <DocumentListScreen navigation={navigation} />
+      </View>
+      <FloatingButton onPress={onAddDocument} />
     </View>
   );
 };

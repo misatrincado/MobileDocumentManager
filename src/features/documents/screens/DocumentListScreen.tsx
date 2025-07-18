@@ -1,43 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Image,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import { Icons } from '../../../components/atoms/IconBank';
 
 type Document = {
   id: string;
   name: string;
   uri: string;
   date: string;
-  type: 'pdf' | 'image';
+  type: string;
 };
 
 const STORAGE_KEY = '@documents';
 
-const DocumentListScreen = ({ navigation }: any) => {
+// Función para detectar si es imagen por la extensión o tipo
+const isImageFile = (doc: Document) => {
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+  const ext = doc.name.split('.').pop()?.toLowerCase() || '';
+  return doc.type.startsWith('image') || imageExtensions.includes(ext);
+};
+
+const DocumentListScreen = ({ navigation }) => {
   const [documents, setDocuments] = useState<Document[]>([]);
+  console.log('documents', documents)
+  const isFocused = useIsFocused();
 
   const loadDocuments = async () => {
     try {
-      const json = await AsyncStorage.getItem(STORAGE_KEY);
-      if (json) setDocuments(JSON.parse(json));
-    } catch (e) {
+      const stored = await AsyncStorage.getItem(STORAGE_KEY);
+      console.log('Cargando documentos:', stored);
+      const docs = stored ? JSON.parse(stored) : [];
+      setDocuments(docs);
+    } catch {
       Alert.alert('Error', 'No se pudieron cargar los documentos.');
     }
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', loadDocuments);
-    return unsubscribe;
-  }, [navigation]);
+    if (isFocused) loadDocuments();
+  }, [isFocused]);
 
   const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={() => navigation.navigate('DocumentViewer', { document: item })}
+      onPress={() => navigation.navigate('DocumentDetail', { document: item })}
     >
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.details}>{item.date} - {item.type.toUpperCase()}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {isImageFile(item) ? (
+          <Image
+            source={{ uri: item.uri }}
+            style={styles.thumbnail}
+            resizeMode="cover"
+          />
+        ) : (
+          <Icons.PdfIcon width={50} height={50} color="#3D82F7" />
+        )}
+
+        <View style={{ justifyContent: 'center', marginLeft: 14, flex: 1 }}>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.meta} numberOfLines={1}>
+            {item.description || 'Sin descripción'}
+          </Text>
+          <Text style={styles.meta}>
+            {item.date}  {item.category || 'Sin categoría'}
+          </Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
+
+
 
   return (
     <View style={styles.container}>
@@ -45,14 +86,10 @@ const DocumentListScreen = ({ navigation }: any) => {
         data={documents}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        ListEmptyComponent={<Text style={styles.empty}>No hay documentos cargados.</Text>}
+        ListEmptyComponent={
+          <Text style={styles.empty}>No hay documentos guardados.</Text>
+        }
       />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => navigation.navigate('AddDocument')}
-      >
-        <Text style={styles.addButtonText}>+ Agregar Documento</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -60,17 +97,19 @@ const DocumentListScreen = ({ navigation }: any) => {
 export default DocumentListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  item: { padding: 12, borderBottomWidth: 1, borderBottomColor: '#ccc' },
-  name: { fontSize: 16, fontWeight: 'bold' },
-  details: { fontSize: 12, color: '#555' },
-  empty: { textAlign: 'center', marginTop: 20, color: '#999' },
-  addButton: {
-    backgroundColor: '#0066cc',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 12,
+  container: { padding: 16 },
+  item: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  addButtonText: { color: 'white', fontWeight: 'bold', fontSize: 16 },
+  thumbnail: {
+    width: 50,
+    height: 50,
+    borderRadius: 6,
+    backgroundColor: '#e1e4e8',
+  },
+  title: { fontSize: 16, fontWeight: 'bold' },
+  meta: { fontSize: 12, color: '#666' },
+  empty: { textAlign: 'center', marginTop: 32, color: '#888' },
 });
