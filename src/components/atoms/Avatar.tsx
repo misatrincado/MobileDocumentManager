@@ -4,7 +4,7 @@ import { Image, StyleSheet } from 'react-native';
 type AvatarProps = { uri: string; size?: number };
 
 export const Avatar = ({ uri, size = 50 }: AvatarProps) => (
-  <Image source={{ uri }} style={[styles.image, { width: size, height: size, borderRadius: size / 2 }]} />
+  <Image source={require('../../assets/images/avatar.png')} style={[styles.image, { width: size, height: size, borderRadius: size / 2 }]} />
 );
 
 const styles = StyleSheet.create({
