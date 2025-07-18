@@ -8,6 +8,7 @@ import {
   Alert,
   Image,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -123,15 +124,17 @@ const DocumentListScreen = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-        
-      <FlatList
-        data={filteredDocuments}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          <Text style={styles.empty}>No hay documentos guardados.</Text>
-        }
-      />
+      <ScrollView contentContainerStyle={{maxHeight:540}}>
+
+        <FlatList
+          data={filteredDocuments}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            <Text style={styles.empty}>No hay documentos guardados.</Text>
+          }
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -139,7 +142,7 @@ const DocumentListScreen = ({ navigation }) => {
 export default DocumentListScreen;
 
 const styles = StyleSheet.create({
-  container: {  padding: 16 },
+  container: { padding: 16 },
   searchInput: {
     borderWidth: 1,
     borderColor: '#ccc',
