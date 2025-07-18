@@ -118,3 +118,8 @@ Los documentos se almacenan en AsyncStorage bajo la key @documents:
 
 ![Mockups](./src/assets/images/design/Mockups.png)
 ![DesignSystem](./src/assets/images/design/DesignSystem.png)
+
+## Video
+
+[![Mira este video](./src/assets/images/capturas/image1.png)](https://vimeo.com/1102560006?share=copy#t=0)
+
