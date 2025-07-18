@@ -1,97 +1,117 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Mobile Document Manager
 
-# Getting Started
+**Mobile Document Manager** es una aplicación móvil construida con **React Native**, orientada a gestionar documentos locales en dispositivos móviles. Permite al usuario seleccionar, describir, visualizar, filtrar, editar y eliminar documentos PDF o imágenes, categorizándolos y manteniéndolos almacenados localmente mediante AsyncStorage.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Capturas de pantalla
 
-## Step 1: Start Metro
+![Captura1](./src/assets/images/capturas/image1.png)
+![Captura2](./src/assets/images/capturas/image2.png)
+![Captura3](./src/assets/images/capturas/image3.png)
+![Captura4](./src/assets/images/capturas/image4.png)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Diseño UI/UX
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+![Mockups](./src/assets/images/design/Mockups.png)
+![DesignSystem](./src/assets/images/design/DesignSystem.png)
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
-```
+## Pasos para instalación local
 
-## Step 2: Build and run your app
+### 1. Clona el proyecto
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+git clone https://github.com/...
+cd mobile-document-manager
 
-### Android
+### 2. Instala las dependencias
 
-```sh
-# Using npm
-npm run android
+npm install
 
-# OR using Yarn
-yarn android
-```
+### 3. Corre en Android o IOS
 
-### iOS
+#Android
+npx react-native run-android
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+#IOS
+cd ios && pod install && cd ..
+npx react-native run-ios
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
 
-```sh
-bundle install
-```
+# Tecnologías
 
-Then, and every time you update your native dependencies, run:
+React Native
+TypeScript
+React Navigation
+react-native-pdf
+AsyncStorage
+ImagePicker
 
-```sh
-bundle exec pod install
-```
+---
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## Estructura del Proyecto
 
-```sh
-# Using npm
-npm run ios
+La arquitectura de esta aplicación está basada en dos principios clave: **Feature-Based Design** y **Atomic Design**.
 
-# OR using Yarn
-yarn ios
-```
+---
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### ¿Por qué Feature-Based Design?
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Feature-Based Design organiza el código por funcionalidad, no por tipo de archivo. Esto permite:
 
-## Step 3: Modify your app
+- Agrupar pantallas, componentes y lógica relacionada dentro de una misma carpeta (`features`).
+- Escalar más fácilmente la aplicación sin que se convierta en una estructura plana y desorganizada.
+- Facilitar la colaboración entre equipos, ya que cada feature está desacoplada de las demás.
+- Promueve encapsulamiento: todo lo que pertenece a una funcionalidad vive en su propia carpeta.
 
-Now that you have successfully run the app, let's make changes!
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Esto hace que agregar una nueva funcionalidad (ej. favoritos, compartir, búsqueda) implique simplemente crear una nueva carpeta dentro de `features`, manteniendo todo lo relacionado en un solo lugar.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+---
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### ¿Por qué Atomic Design?
 
-## Congratulations! :tada:
+El patrón de diseño atómico organiza los componentes UI en niveles de complejidad:
 
-You've successfully run and modified your React Native App. :partying_face:
+- **Atoms:** elementos básicos de UI (Botón, Ícono, Input).
+- **Molecules/Organisms (opcional):** agrupaciones reutilizables de UI.
+- **Templates/Pages (en pantallas, no explícitamente nombrado aquí).**
 
-### Now what?
+Esta organización:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- Favorece la reutilización y consistencia visual.
+- Reduce la duplicación de código.
+- Hace que los cambios de diseño sean más fáciles de aplicar globalmente.
 
-# Troubleshooting
+---
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Funcionalidades Principales de la App
 
-# Learn More
+- ✅ Cargar documentos (PDFs e imágenes).
+- ✅ Añadir nombre, descripción y categoría al documento.
+- ✅ Previsualización (PDF con `react-native-pdf`, imágenes con `Image`).
+- ✅ Edición y eliminación de archivos.
+- ✅ Búsqueda por nombre o descripción y filtro por categoría
+- ✅ Calificación del servicio tras guardar el documento.
+- ✅ Persistencia de datos con AsyncStorage.
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Almacenamiento con AsyncStorage
+
+Los documentos se guardan localmente en el dispositivo usando `@react-native-async-storage/async-storage` bajo la clave:
+
+```ts
+const STORAGE_KEY = '@documents';
+
+Los documentos se almacenan en AsyncStorage bajo la key @documents:
+
+{
+  id: string;             // Identificador único
+  name: string;           // Nombre del archivo (editable)
+  description: string;    // Descripción del archivo
+  category: string;       // Categoría asignada
+  uri: string;            // URI del archivo original
+  localUri: string;       // Copia local para uso en la app
+  type: string;           // Tipo MIME (e.g., image/jpeg, application/pdf)
+  date: string;           // Fecha de carga
+}

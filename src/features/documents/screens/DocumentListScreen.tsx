@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   Image,
+  TextInput,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -18,26 +19,29 @@ type Document = {
   uri: string;
   date: string;
   type: string;
+  description?: string;
+  category?: string;
 };
 
 const STORAGE_KEY = '@documents';
 
-// Función para detectar si es imagen por la extensión o tipo
 const isImageFile = (doc: Document) => {
   const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
   const ext = doc.name.split('.').pop()?.toLowerCase() || '';
   return doc.type.startsWith('image') || imageExtensions.includes(ext);
 };
 
+const categories = ['Todas', 'Familia', 'Trabajo', 'Viajes', 'Entretenimiento'];
+
 const DocumentListScreen = ({ navigation }) => {
   const [documents, setDocuments] = useState<Document[]>([]);
-  console.log('documents', documents)
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Todas');
   const isFocused = useIsFocused();
 
   const loadDocuments = async () => {
     try {
       const stored = await AsyncStorage.getItem(STORAGE_KEY);
-      console.log('Cargando documentos:', stored);
       const docs = stored ? JSON.parse(stored) : [];
       setDocuments(docs);
     } catch {
@@ -48,6 +52,17 @@ const DocumentListScreen = ({ navigation }) => {
   useEffect(() => {
     if (isFocused) loadDocuments();
   }, [isFocused]);
+
+  const filteredDocuments = documents.filter((doc) => {
+    const matchesSearch =
+      doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === 'Todas' || doc.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
 
   const renderItem = ({ item }: { item: Document }) => (
     <TouchableOpacity
@@ -78,12 +93,39 @@ const DocumentListScreen = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-
-
   return (
     <View style={styles.container}>
+      <TextInput
+        placeholder="Buscar por nombre o descripción..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={styles.searchInput}
+      />
+
+      <View style={styles.categoryContainer}>
+        {categories.map((cat) => (
+          <TouchableOpacity
+            key={cat}
+            onPress={() => setSelectedCategory(cat)}
+            style={[
+              styles.categoryButton,
+              selectedCategory === cat && styles.selectedCategory,
+            ]}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                selectedCategory === cat && styles.selectedText,
+              ]}
+            >
+              {cat}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+        
       <FlatList
-        data={documents}
+        data={filteredDocuments}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         ListEmptyComponent={
@@ -97,7 +139,38 @@ const DocumentListScreen = ({ navigation }) => {
 export default DocumentListScreen;
 
 const styles = StyleSheet.create({
-  container: { padding: 16 },
+  container: {  padding: 16 },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 12,
+    gap: 8,
+  },
+  categoryButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  selectedCategory: {
+    backgroundColor: '#3D82F7',
+    borderColor: '#3D82F7',
+  },
+  categoryText: {
+    fontSize: 10,
+    color: '#333',
+  },
+  selectedText: {
+    color: '#fff',
+  },
   item: {
     padding: 12,
     borderBottomWidth: 1,
