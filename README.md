@@ -121,5 +121,5 @@ Los documentos se almacenan en AsyncStorage bajo la key @documents:
 
 ## Video
 
-[![Mira este video](./src/assets/images/capturas/image1.png)](https://vimeo.com/1102560006?share=copy#t=0)
+[![Mira este video](./src/assets/images/videoScreen.png)](https://vimeo.com/1102560006?share=copy#t=0)
 
